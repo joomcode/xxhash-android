@@ -1,0 +1,155 @@
+/*
+ * Copyright 2017 SIA Joom
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import com.jfrog.bintray.gradle.BintrayUploadTask
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+
+def artifactName = 'xxhash-android'
+group = project.rootProject.group
+version = project.rootProject.version
+
+android {
+  compileSdkVersion androidCompileSdkVersion
+  buildToolsVersion androidBuildToolsVersion
+
+  defaultConfig {
+    minSdkVersion androidMinSdkVersion
+    targetSdkVersion androidTargetSdkVersion
+    versionCode 1
+    versionName version
+    archivesBaseName = 'xxhash-android'
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    externalNativeBuild {
+      cmake {
+        cFlags "-std=c99", "-fvisibility=hidden", "-I.", "-I${project.file("external/xxHash")}"
+      }
+    }
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+      externalNativeBuild {
+        cmake {
+          cFlags "-O2", "-g0"
+        }
+      }
+    }
+  }
+
+  externalNativeBuild {
+    cmake {
+      path "CMakeLists.txt"
+    }
+  }
+}
+
+dependencies {
+  implementation "com.android.support:support-annotations:$supportVersion"
+
+  testImplementation "junit:junit:$junitVersion"
+
+  androidTestImplementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlinVersion"
+  androidTestImplementation "com.android.support.test:runner:$testRunnerVersion"
+  androidTestImplementation "com.android.support.test.espresso:espresso-core:$espressoVersion"
+}
+
+publishing {
+  android.libraryVariants.all { variant ->
+    publications {
+      create(variant.name.capitalize(), MavenPublication) {
+        artifactId artifactName
+        variant.outputs.each { output ->
+          artifact output.packageLibrary
+        }
+
+        artifact tasks["javadocJar${variant.name.capitalize()}"]
+        artifact tasks["sourcesJar${variant.name.capitalize()}"]
+
+        def dependencies = project.configurations["${variant.baseName}CompileClasspath"].allDependencies
+        if (!dependencies.empty) {
+          pom.withXml {
+            asNode().appendNode("dependencies").with {
+              dependencies.each { dependency ->
+                appendNode("dependency").with {
+                  appendNode("groupId", dependency.group)
+                  appendNode("artifactId", dependency.name)
+                  appendNode("version", dependency.version)
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+android.libraryVariants.all { variant ->
+  tasks.addRule("Publishing configuration for ${variant.name} variant") { taskName ->
+    if (taskName == "bintrayUpload${variant.name.capitalize()}") {
+      tasks.create(taskName, BintrayUploadTask) {
+        apiUrl = BintrayUploadTask.API_URL_DEFAULT
+
+        user = project.findProperty('bintrayUser')
+        apiKey = project.findProperty('bintrayKey')
+        publications = [variant.name.capitalize()]
+
+        repoName = 'maven'
+        packageName = artifactName
+
+        versionName = project.version
+        versionReleased = new Date()
+        versionVcsTag = "v${project.version}"
+
+        dependsOn tasks["assemble${variant.name.capitalize()}"]
+        dependsOn tasks["javadocJar${variant.name.capitalize()}"]
+        dependsOn tasks["sourcesJar${variant.name.capitalize()}"]
+        dependsOn tasks["generatePomFileFor${variant.name.capitalize()}Publication"]
+      }
+    } else if (taskName == "javadoc${variant.name.capitalize()}") {
+      tasks.create(taskName, Javadoc) {
+        source = variant.sourceSets.javaDirectories
+        classpath += variant.javaCompiler.classpath
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+
+        if (JavaVersion.current().isJava8Compatible()) {
+          options.addStringOption('Xdoclint:none', '-quiet')
+          options.encoding "UTF-8"
+        }
+      }
+    } else if (taskName == "javadocJar${variant.name.capitalize()}") {
+      tasks.create(taskName, Jar) {
+        classifier = 'javadoc'
+        def javadoc = tasks["javadoc${variant.name.capitalize()}"]
+        from javadoc.destinationDir
+        dependsOn javadoc
+      }
+    } else if (taskName == "sourcesJar${variant.name.capitalize()}") {
+      tasks.create(taskName, Jar) {
+        classifier = 'sources'
+        from variant.sourceSets.javaDirectories
+      }
+    }
+  }
+}

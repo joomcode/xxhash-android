@@ -1,0 +1,48 @@
+buildscript {
+  def properties = new Properties()
+  properties.load(new FileInputStream(new File(rootDir, "version.properties")))
+  def major = properties['version.major'] as int
+  def minor = properties['version.minor'] as int
+  def patch = properties['version.patch'] as int
+  def suffix = properties['version.suffix']?.toString()?.trim() ?: ""
+  def snapshot = properties['version.snapshot'].toBoolean()
+  version = "$major.$minor.$patch" + (suffix.isAllWhitespace() ? '' : "-$suffix") + (snapshot ? '-SNAPSHOT' : '')
+  group = 'com.joom'
+
+  ext.androidCompileSdkVersion = 26
+  ext.androidBuildToolsVersion = "26.0.2"
+  ext.androidMinSdkVersion = 16
+  ext.androidTargetSdkVersion = 26
+
+  ext.androidToolsVersion = '3.0.0-rc2'
+  ext.kotlinVersion = '1.1.51'
+  ext.bintrayVersion = '1.7.3'
+
+  ext.supportVersion = '26.1.0'
+
+  ext.junitVersion = '4.12'
+  ext.testRunnerVersion = '1.0.1'
+  ext.espressoVersion = '3.0.1'
+
+  repositories {
+    google()
+    jcenter()
+  }
+
+  dependencies {
+    classpath "com.android.tools.build:gradle:$androidToolsVersion"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:$bintrayVersion"
+  }
+}
+
+allprojects {
+  repositories {
+    google()
+    jcenter()
+  }
+}
+
+task clean(type: Delete) {
+  delete rootProject.buildDir
+}
