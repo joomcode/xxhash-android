@@ -9,16 +9,16 @@ buildscript {
   version = "$major.$minor.$patch" + (suffix.isAllWhitespace() ? '' : "-$suffix") + (snapshot ? '-SNAPSHOT' : '')
   group = 'com.joom'
 
-  ext.androidCompileSdkVersion = 26
-  ext.androidBuildToolsVersion = "26.0.2"
+  ext.androidCompileSdkVersion = 27
+  ext.androidBuildToolsVersion = "27.0.3"
   ext.androidMinSdkVersion = 16
-  ext.androidTargetSdkVersion = 26
+  ext.androidTargetSdkVersion = 27
 
-  ext.androidToolsVersion = '3.0.0-rc2'
-  ext.kotlinVersion = '1.1.51'
+  ext.androidToolsVersion = '3.0.1'
+  ext.kotlinVersion = '1.2.10'
   ext.bintrayVersion = '1.7.3'
 
-  ext.supportVersion = '26.1.0'
+  ext.supportVersion = '27.0.2'
 
   ext.junitVersion = '4.12'
   ext.testRunnerVersion = '1.0.1'
