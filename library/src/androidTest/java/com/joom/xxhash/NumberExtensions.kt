@@ -16,7 +16,7 @@
 
 @file:Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
 
-package io.michaelrocks.xxhash
+package com.joom.xxhash
 
 import java.lang.Character as JavaChar
 import java.lang.Double as JavaDouble

@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package io.michaelrocks.xxhash;
+package com.joom.xxhash;
 
 import android.support.annotation.NonNull;
 
 import java.nio.ByteBuffer;
 
-class XxHash64Native extends XxHashNative {
-  static native long hashForArray(@NonNull byte[] input, int offset, int length, long seed);
-  static native long hashForByteBuffer(@NonNull ByteBuffer input, int offset, int length, long seed);
-  static native long create(long seed);
+class XxHash32Native extends XxHashNative {
+  static native int hashForArray(@NonNull byte[] input, int offset, int length, int seed);
+  static native int hashForByteBuffer(@NonNull ByteBuffer input, int offset, int length, int seed);
+  static native long create(int seed);
   static native void updateWithArray(long state, @NonNull byte[] input, int offset, int length);
   static native void updateWithByteBuffer(long state, @NonNull ByteBuffer input, int offset, int length);
   static native void updateWithBoolean(long state, boolean input);
@@ -34,7 +34,7 @@ class XxHash64Native extends XxHashNative {
   static native void updateWithLong(long state, long input);
   static native void updateWithFloat(long state, float input);
   static native void updateWithDouble(long state, double input);
-  static native long digest(long state);
-  static native void reset(long state, long seed);
+  static native int digest(long state);
+  static native void reset(long state, int seed);
   static native void destroy(long state);
 }

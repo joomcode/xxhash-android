@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.michaelrocks.xxhash
+package com.joom.xxhash
 
 import java.nio.ByteBuffer
 import java.util.Arrays

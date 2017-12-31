@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.michaelrocks.xxhash
+package com.joom.xxhash
 
 import java.io.ByteArrayOutputStream
 import java.io.DataOutputStream

@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package io.michaelrocks.xxhash;
+package com.joom.xxhash
 
-class XxHashNative {
-  static {
-    System.loadLibrary("xxhash");
+interface Hasher {
+  fun update(argument: XxHashArgument)
+
+  fun update(arguments: List<XxHashArgument>) {
+    arguments.forEach { update(it) }
   }
 }

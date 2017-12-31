@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package io.michaelrocks.xxhash
+package com.joom.xxhash
 
-class XxHash32Hasher(seed: Int?) : Hasher {
-  val hash = if (seed == null) XxHash32() else XxHash32(seed)
+class XxHash64Hasher(seed: Long?) : Hasher {
+  val hash = if (seed == null) XxHash64() else XxHash64(seed)
 
   override fun update(argument: XxHashArgument) {
     return when (argument) {

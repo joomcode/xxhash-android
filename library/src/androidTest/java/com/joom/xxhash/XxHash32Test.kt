@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.michaelrocks.xxhash
+package com.joom.xxhash
 
 import android.support.test.runner.AndroidJUnit4
 import org.junit.Assert
@@ -23,7 +23,7 @@ import org.junit.runner.RunWith
 import java.util.Random
 
 @RunWith(AndroidJUnit4::class)
-class XxHash64Test {
+class XxHash32Test {
   @Test
   fun testWholeArray() {
     repeat(100) { checkFactory(XxHashArgument.WholeArray.ArgumentFactory) }
@@ -102,19 +102,19 @@ class XxHash64Test {
   private fun checkFactory(factory: XxHashArgument.Factory<*>) {
     val random = Random()
     val arguments = factory.createList(random)
-    val seed = if (random.nextBoolean()) random.nextLong() else null
+    val seed = if (random.nextBoolean()) random.nextInt() else null
     checkArguments(arguments, seed)
   }
 
-  private fun checkArguments(arguments: List<XxHashArgument>, seed: Long?) {
-    val actualHash = XxHash64Hasher(seed).run {
+  private fun checkArguments(arguments: List<XxHashArgument>, seed: Int?) {
+    val actualHash = XxHash32Hasher(seed).run {
       update(arguments)
       hash.digest()
     }
 
     val expectedHash = ByteArrayHasher().run {
       update(arguments)
-      if (seed == null) XxHash64.hashForArray(toByteArray()) else XxHash64.hashForArray(toByteArray(), seed)
+      if (seed == null) XxHash32.hashForArray(toByteArray()) else XxHash32.hashForArray(toByteArray(), seed)
     }
 
     if (expectedHash != actualHash) {
