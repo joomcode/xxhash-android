@@ -16,11 +16,11 @@
 
 package com.joom.xxhash;
 
-import android.support.annotation.NonNull;
-
 import java.io.Closeable;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+
+import javax.annotation.Nonnull;
 
 public class XxHash64 implements Closeable {
   private static final long DEFAULT_SEED = 0L;
@@ -35,67 +35,67 @@ public class XxHash64 implements Closeable {
     state = XxHash64Native.create(seed);
   }
 
-  public static long hashForArray(@NonNull final byte[] buffer) {
+  public static long hashForArray(@Nonnull final byte[] buffer) {
     checkBufferNotNull(buffer);
     return XxHash64Native.hashForArray(buffer, 0, buffer.length, DEFAULT_SEED);
   }
 
-  public static long hashForArray(@NonNull final byte[] buffer, final long seed) {
+  public static long hashForArray(@Nonnull final byte[] buffer, final long seed) {
     checkBufferNotNull(buffer);
     return XxHash64Native.hashForArray(buffer, 0, buffer.length, seed);
   }
 
-  public static long hashForArray(@NonNull final byte[] buffer, final int offset, final int size) {
+  public static long hashForArray(@Nonnull final byte[] buffer, final int offset, final int size) {
     checkBufferNotNull(buffer);
     checkValidRange(buffer.length, offset, size);
     return XxHash64Native.hashForArray(buffer, offset, size, DEFAULT_SEED);
   }
 
-  public static long hashForArray(@NonNull final byte[] buffer, final int offset, final int size, final long seed) {
+  public static long hashForArray(@Nonnull final byte[] buffer, final int offset, final int size, final long seed) {
     checkBufferNotNull(buffer);
     checkValidRange(buffer.length, offset, size);
     return XxHash64Native.hashForArray(buffer, offset, size, seed);
   }
 
-  public static long hashForByteBuffer(@NonNull final ByteBuffer buffer) {
+  public static long hashForByteBuffer(@Nonnull final ByteBuffer buffer) {
     checkBufferNotNull(buffer);
     return XxHash64Native.hashForByteBuffer(buffer, buffer.position(), buffer.limit(), DEFAULT_SEED);
   }
 
-  public static long hashForArray(@NonNull final ByteBuffer buffer, final long seed) {
+  public static long hashForArray(@Nonnull final ByteBuffer buffer, final long seed) {
     checkBufferNotNull(buffer);
     return XxHash64Native.hashForByteBuffer(buffer, buffer.position(), buffer.limit(), seed);
   }
 
-  public static long hashForArray(@NonNull final ByteBuffer buffer, final int offset, final int size) {
+  public static long hashForArray(@Nonnull final ByteBuffer buffer, final int offset, final int size) {
     checkBufferNotNull(buffer);
     checkValidRange(buffer.limit(), offset, size);
     return XxHash64Native.hashForByteBuffer(buffer, offset, size, DEFAULT_SEED);
   }
 
-  public static long hashForArray(@NonNull final ByteBuffer buffer, final int offset, final int size, final long seed) {
+  public static long hashForArray(@Nonnull final ByteBuffer buffer, final int offset, final int size, final long seed) {
     checkBufferNotNull(buffer);
     checkValidRange(buffer.limit(), offset, size);
     return XxHash64Native.hashForByteBuffer(buffer, offset, size, seed);
   }
 
-  public void update(@NonNull final byte[] buffer) {
+  public void update(@Nonnull final byte[] buffer) {
     checkBufferNotNull(buffer);
     XxHash64Native.updateWithArray(checkState(), buffer, 0, buffer.length);
   }
 
-  public void update(@NonNull final byte[] buffer, final int offset, final int size) {
+  public void update(@Nonnull final byte[] buffer, final int offset, final int size) {
     checkBufferNotNull(buffer);
     checkValidRange(buffer.length, offset, size);
     XxHash64Native.updateWithArray(checkState(), buffer, offset, size);
   }
 
-  public void update(@NonNull final ByteBuffer buffer) {
+  public void update(@Nonnull final ByteBuffer buffer) {
     checkBufferNotNull(buffer);
     updateWithByteBufferInternal(buffer, buffer.position(), buffer.remaining());
   }
 
-  public void update(@NonNull final ByteBuffer buffer, final int offset, final int size) {
+  public void update(@Nonnull final ByteBuffer buffer, final int offset, final int size) {
     checkBufferNotNull(buffer);
     checkValidRange(buffer.limit(), offset, size);
     updateWithByteBufferInternal(buffer, offset, size);
@@ -188,7 +188,7 @@ public class XxHash64 implements Closeable {
     return state;
   }
 
-  private void updateWithByteBufferInternal(@NonNull final ByteBuffer buffer, final int offset, final int size) {
+  private void updateWithByteBufferInternal(@Nonnull final ByteBuffer buffer, final int offset, final int size) {
     if (buffer.isDirect()) {
       XxHash64Native.updateWithByteBuffer(checkState(), buffer, offset, size);
     } else if (buffer.hasArray()) {

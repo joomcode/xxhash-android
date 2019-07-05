@@ -2,20 +2,21 @@ buildscript {
   version = '1.1.0'
   group = 'com.joom'
 
-  ext.androidCompileSdkVersion = 27
-  ext.androidBuildToolsVersion = "27.0.3"
+  ext.androidCompileSdkVersion = 29
+  ext.androidBuildToolsVersion = "29.0.0"
   ext.androidMinSdkVersion = 16
-  ext.androidTargetSdkVersion = 27
+  ext.androidTargetSdkVersion = 29
 
-  ext.androidToolsVersion = '3.0.1'
-  ext.kotlinVersion = '1.2.10'
-  ext.bintrayVersion = '1.7.3'
+  ext.androidToolsVersion = '3.4.1'
+  ext.kotlinVersion = '1.3.41'
+  ext.bintrayVersion = '1.8.4'
 
-  ext.supportVersion = '27.0.2'
+  ext.jsr305Version = '3.0.2'
 
   ext.junitVersion = '4.12'
-  ext.testRunnerVersion = '1.0.1'
-  ext.espressoVersion = '3.0.1'
+  ext.androidxEspressoVersion = '3.2.0'
+  ext.androidxTestRunnerVersion = '1.2.0'
+  ext.androidxTestExtJunitVersion = '1.1.1'
 
   repositories {
     google()

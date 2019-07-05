@@ -16,16 +16,16 @@
 
 package com.joom.xxhash;
 
-import android.support.annotation.NonNull;
-
 import java.nio.ByteBuffer;
 
+import javax.annotation.Nonnull;
+
 class XxHash64Native extends XxHashNative {
-  static native long hashForArray(@NonNull byte[] input, int offset, int length, long seed);
-  static native long hashForByteBuffer(@NonNull ByteBuffer input, int offset, int length, long seed);
+  static native long hashForArray(@Nonnull byte[] input, int offset, int length, long seed);
+  static native long hashForByteBuffer(@Nonnull ByteBuffer input, int offset, int length, long seed);
   static native long create(long seed);
-  static native void updateWithArray(long state, @NonNull byte[] input, int offset, int length);
-  static native void updateWithByteBuffer(long state, @NonNull ByteBuffer input, int offset, int length);
+  static native void updateWithArray(long state, @Nonnull byte[] input, int offset, int length);
+  static native void updateWithByteBuffer(long state, @Nonnull ByteBuffer input, int offset, int length);
   static native void updateWithBoolean(long state, boolean input);
   static native void updateWithChar(long state, char input);
   static native void updateWithByte(long state, byte input);
