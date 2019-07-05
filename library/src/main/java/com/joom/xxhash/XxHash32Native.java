@@ -20,7 +20,11 @@ import java.nio.ByteBuffer;
 
 import javax.annotation.Nonnull;
 
-class XxHash32Native extends XxHashNative {
+class XxHash32Native {
+  static {
+    XxHash.loadNativeLibrary();
+  }
+
   static native int hashForArray(@Nonnull byte[] input, int offset, int length, int seed);
   static native int hashForByteBuffer(@Nonnull ByteBuffer input, int offset, int length, int seed);
   static native long create(int seed);
