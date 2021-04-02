@@ -1,6 +1,6 @@
 buildscript {
   version = '1.2.0'
-  group = 'com.joom'
+  group = 'com.joom.xxhash'
 
   ext.androidCompileSdkVersion = 30
   ext.androidBuildToolsVersion = "30.0.3"
