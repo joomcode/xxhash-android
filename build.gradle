@@ -2,15 +2,16 @@ buildscript {
   version = '1.2.0'
   group = 'com.joom.xxhash'
 
+  ext.javaVersion = JavaVersion.VERSION_1_8
+  ext.kotlinVersion = '1.4.32'
+  ext.androidToolsVersion = '4.2.0-beta06'
+
+  ext.jsr305Version = '3.0.2'
+
   ext.androidCompileSdkVersion = 30
   ext.androidBuildToolsVersion = "30.0.3"
   ext.androidMinSdkVersion = 16
   ext.androidTargetSdkVersion = 30
-
-  ext.androidToolsVersion = '4.2.0-beta06'
-  ext.kotlinVersion = '1.4.32'
-
-  ext.jsr305Version = '3.0.2'
 
   ext.junitVersion = '4.13.2'
   ext.androidxEspressoVersion = '3.3.0'

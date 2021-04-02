@@ -45,6 +45,15 @@ android {
       path "CMakeLists.txt"
     }
   }
+
+  compileOptions {
+    sourceCompatibility javaVersion
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  kotlinOptions {
+    jvmTarget = javaVersion
+  }
 }
 
 dependencies {
