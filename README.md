@@ -12,7 +12,7 @@ repositories {
 }
 
 dependencies {
-  implementation 'com.joom:xxhash-android:1.1.0'
+  implementation 'com.joom:xxhash-android:1.2.0'
 }
 ```
 
