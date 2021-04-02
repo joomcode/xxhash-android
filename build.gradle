@@ -25,7 +25,6 @@ buildscript {
   dependencies {
     classpath "com.android.tools.build:gradle:$androidToolsVersion"
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:$bintrayVersion"
   }
 }
 
@@ -38,4 +37,20 @@ allprojects {
 
 task clean(type: Delete) {
   delete rootProject.buildDir
+}
+
+allprojects { project ->
+  def publishPropertiesFile = rootProject.file('publish.properties')
+  if (publishPropertiesFile.exists()) {
+    def localProperties = new Properties()
+    publishPropertiesFile.withInputStream { stream -> localProperties.load(stream) }
+    localProperties.each { property ->
+      if (property.key == "signing.secretKeyRingFile") {
+        // If this is the key ring, treat it as a relative path
+        project.ext.set(property.key, rootProject.file(property.value).absolutePath)
+      } else {
+        project.ext.set(property.key, property.value)
+      }
+    }
+  }
 }
