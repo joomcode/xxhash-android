@@ -20,7 +20,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.Random
+import java.util.*
 
 @RunWith(AndroidJUnit4::class)
 class XxHash64Test {
@@ -107,18 +107,27 @@ class XxHash64Test {
   }
 
   private fun checkArguments(arguments: List<XxHashArgument>, seed: Long?) {
-    val actualHash = XxHash64Hasher(seed).run {
+    val bytes = ByteArrayHasher().run {
+      update(arguments)
+      toByteArray()
+    }
+    val expectedHash = if (seed == null) {
+      XxHash64.hashForArray(bytes)
+    } else {
+      XxHash64.hashForArray(bytes, seed)
+    }
+
+    val nativeHash = XxHash64Hasher(seed).run {
       update(arguments)
       hash.digest()
     }
-
-    val expectedHash = ByteArrayHasher().run {
-      update(arguments)
-      if (seed == null) XxHash64.hashForArray(toByteArray()) else XxHash64.hashForArray(toByteArray(), seed)
+    if (expectedHash != nativeHash) {
+      Assert.fail("Expected $expectedHash, native $nativeHash, seed = $seed, arguments = $arguments")
     }
 
-    if (expectedHash != actualHash) {
-      Assert.fail("Expected $expectedHash, actual $actualHash, seed = $seed, arguments = $arguments")
+    val jvmHash = XxHash64Jvm.hash64(bytes, bytes.size, seed ?: 0)
+    if (expectedHash != jvmHash) {
+      Assert.fail("Expected $expectedHash, jvm $jvmHash, seed = $seed, arguments = $arguments")
     }
   }
 }
